@@ -1,16 +1,14 @@
 from app import app
+from app.blog_helpers import render_page
+from app.blog_helpers import page_exists
 
 #home page
 @app.route("/")
 def home():
-    return open('app/home/home.html','r').read()
-#    return app.send_static_file('home.html')
+    return render_page('index.html')
 
-@app.route('/<path:path>')
-def static_file(path):
-    if path[-3:] == 'css':
-        return app.send_static_file(path)
-
-@app.route("/about")
-def about():
-    return "<h1>About Me</h1>"
+@app.route('/<view_name>')
+def static_file(view_name):
+    if page_exists(view_name + '.html'):
+        return render_page(view_name + '.html')
+    return render_page('404.html')
