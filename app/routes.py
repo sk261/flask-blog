@@ -1,4 +1,5 @@
 from app import app
+from flask import request, session
 import app.blog_helpers as BH
 
 #home page
@@ -19,10 +20,13 @@ def edit(view_name):
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    page = BH.render_page('login.html')
+    if 'user_name' in session:
+        page += "alert('Already logged in as " + session['user_name'] + "')"
     if request.method == 'POST':
-        pass
-#        session['user_name'] = request.values['user_name']
-    return ""
+        if 'user_name' in request.values:
+            session['user_name'] = request.values['user_name']
+    return page
 
 @app.route("/all")
 def all():
