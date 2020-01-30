@@ -22,7 +22,7 @@ def edit(view_name):
 def login():
     page = BH.render_page('login.html')
     if 'user_name' in session:
-        page += "alert('Already logged in as " + session['user_name'] + "')"
+        page += "<script>alert('Already logged in as " + session['user_name'] + "')</script>"
     if request.method == 'POST':
         if 'user_name' in request.values:
             session['user_name'] = request.values['user_name']
