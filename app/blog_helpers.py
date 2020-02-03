@@ -1,6 +1,7 @@
 import os
+from flask import send_file
 
-_VIEWS_PATH = 'app/views'
+_VIEWS_PATH = 'app/templates'
 def _set_path(file_name, dir_path_append):
     dir_path = _VIEWS_PATH
     if not dir_path_append is None:
@@ -11,8 +12,12 @@ def _set_path(file_name, dir_path_append):
 def render_page(file_name, dir_path_append = None):
     path = _set_path(file_name, dir_path_append)
     html = ""
-    with open(path) as html_file:
-        html = html_file.read()
+    if file_name.endswith('.png'):
+        path = path[path.find('/')+1:]
+        html = send_file(path, mimetype='image/png')
+    else:
+        with open(path) as html_file:
+            html = html_file.read()
     return html
 
 def page_exists(file_name, dir_path_append = None):

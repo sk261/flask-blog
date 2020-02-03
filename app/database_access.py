@@ -1,5 +1,5 @@
 import sqlite3
-_DB_FullPath = 'web_pages.db'
+_DB_FullPath = 'app/webpages.db'
 _Connection = sqlite3.connect(_DB_FullPath)
 _Cusor = _Connection.cursor()
 

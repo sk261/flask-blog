@@ -52,6 +52,11 @@ def static_file(view_name):
     if view_name.endswith('.css'):
         if BH.page_exists(view_name, 'styles'):
             return BH.render_page(view_name, 'styles')
+    elif view_name.endswith('.png'):
+        if BH.page_exists(view_name, 'img'):
+            return BH.render_page(view_name, 'img')
     elif BH.page_exists(view_name + '.html'):
         return BH.render_page(view_name + '.html')
     return BH.render_page('404.html')
+
+    
