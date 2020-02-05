@@ -1,7 +1,7 @@
 import sqlite3
 _DB_FullPath = 'app/webpages.db'
 _Connection = sqlite3.connect(_DB_FullPath)
-_Cusor = _Connection.cursor()
+_Cursor = _Connection.cursor()
 
 '''
 DB Layout
@@ -25,5 +25,4 @@ Icon - Path to Icon image
 '''
 
 def get_data(table, ID):
-    _Cursor.execute('')
-    return ""
+    return _Cursor.execute('SELECT * FROM "' + table + '" WHERE ID IS "' + ID + '"').fetchall()

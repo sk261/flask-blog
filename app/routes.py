@@ -10,7 +10,7 @@ def home():
 @app.route("/edit/<view_name>", methods=['GET', 'POST'])
 def edit(view_name):
     edit_page = static_file(view_name)
-    page = static_file('edit').replace('LOAD',edit_page)
+    page = static_file('edit').replace('LOAD',edit_page.replace('/', '\/').replace('`', '\`'))
 
     ## For when we're ready to start editing stuff
 #    if request.method == 'POST':
@@ -49,6 +49,7 @@ def all():
 
 @app.route('/<view_name>')
 def static_file(view_name):
+    
     if view_name.endswith('.css'):
         if BH.page_exists(view_name, 'styles'):
             return BH.render_page(view_name, 'styles')
@@ -58,5 +59,3 @@ def static_file(view_name):
     elif BH.page_exists(view_name + '.html'):
         return BH.render_page(view_name + '.html')
     return BH.render_page('404.html')
-
-    
