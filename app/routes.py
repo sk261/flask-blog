@@ -1,20 +1,28 @@
 from app import app
 from flask import request, session
 import app.blog_helpers as BH
+import app.database_access as DB
 
 #home page
 @app.route("/")
 def home():
-    return BH.render_page('index.html')
+    return static_file("index.html")
 
 @app.route("/edit/<view_name>", methods=['GET', 'POST'])
 def edit(view_name):
-    edit_page = static_file(view_name)
-    page = static_file('edit').replace('LOAD',edit_page.replace('/', '\/').replace('`', '\`'))
 
     ## For when we're ready to start editing stuff
-#    if request.method == 'POST':
-#        pass
+    if request.method == 'POST':
+        PageName = view_name
+        PageType = 'html'
+        if '.' in view_name:
+            view_name = view_name.split('.')
+            PageName = view_name[0]
+            PageType = view_name[1]
+        DB.save_page(PageName, PageType, request.form['text'])
+        
+    edit_page = static_file(view_name)
+    page = static_file('edit').replace('LOAD',edit_page.replace('/', '\/').replace('`', '\`'))
 
     return page
     
@@ -49,13 +57,9 @@ def all():
 
 @app.route('/<view_name>')
 def static_file(view_name):
-    
-    if view_name.endswith('.css'):
-        if BH.page_exists(view_name, 'styles'):
-            return BH.render_page(view_name, 'styles')
-    elif view_name.endswith('.png'):
-        if BH.page_exists(view_name, 'img'):
-            return BH.render_page(view_name, 'img')
-    elif BH.page_exists(view_name + '.html'):
-        return BH.render_page(view_name + '.html')
-    return BH.render_page('404.html')
+    if '.' in view_name:
+        pname, ptype = view_name.split('.')
+        TPage = DB.get_page(pname, ptype)
+    else:
+        TPage = DB.get_page(view_name, 'html')
+    return TPage
