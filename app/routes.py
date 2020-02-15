@@ -10,7 +10,8 @@ def home():
 
 @app.route("/edit/<view_name>", methods=['GET', 'POST'])
 def edit(view_name):
-
+    if not ('user_name' in session):
+        return static_file('404')
     ## For when we're ready to start editing stuff
     if request.method == 'POST':
         PageName = view_name
@@ -28,7 +29,7 @@ def edit(view_name):
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    page = BH.render_page('login.html')
+    page = static_file('login')
     if 'user_name' in session:
         page += "<script>alert('Already logged in as " + session['user_name'] + "')</script>"
     if request.method == 'POST':
@@ -38,7 +39,7 @@ def login():
 
 @app.route("/all")
 def all():
-    page = BH.render_page('all.html')
+    page = static_file('all')
     # Get all pages
     files = BH.get_page_files()
     insert = ""
